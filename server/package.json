@@ -1,0 +1,30 @@
+{
+  "name": "aidf-be",
+  "version": "1.0.0",
+  "description": "Backend for the AIDF Interview",
+  "main": "dist/app.js",
+  "scripts": {
+    "test": "exit 0",
+    "start": "node dist/app.js",
+    "dev": "tsc-watch --onSuccess \"node dist/app.js\"",
+    "build": "tsc --project tsconfig.json"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:gitaalekhyapaul/aidf-interview.git"
+  },
+  "keywords": [
+    "backend"
+  ],
+  "author": "Gita Alekhya Paul",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^5.1.0",
+    "typescript": "^5.9.2"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.3",
+    "@types/node": "^24.2.1",
+    "tsc-watch": "^7.1.1"
+  }
+}
