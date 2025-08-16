@@ -389,4 +389,22 @@ Choices: ${question.choices.join("|")}`,
       thread_id: thread_id,
     };
   }
+
+  public async getNextQuestion(visitedQuestions: string[], thread_id: string) {
+    const remainingQuestions = LanggraphService.originalQuestions.filter(
+      (q) => !visitedQuestions.includes(q.id)
+    );
+    if (remainingQuestions.length === 0) {
+      return null;
+    }
+    const nextQuestion =
+      remainingQuestions[Math.floor(Math.random() * remainingQuestions.length)];
+    if (!nextQuestion) {
+      return null;
+    }
+    const redisService = await RedisService.getInstance();
+    const redisClient = await redisService.getClient();
+    await redisClient.sAdd(`questions:${thread_id}`, nextQuestion.id);
+    return nextQuestion;
+  }
 }
