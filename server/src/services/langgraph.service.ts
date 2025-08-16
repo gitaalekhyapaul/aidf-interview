@@ -14,6 +14,7 @@ import { AIMessage, HumanMessage } from "@langchain/core/messages";
 import { config } from "dotenv";
 import { Question } from "../@types";
 import { v4 } from "uuid";
+import { MemorySaver } from "@langchain/langgraph";
 
 config();
 
@@ -124,23 +125,50 @@ Choices: ${question.choices.join(", ")}`,
         await LanggraphService.getVectorSearchClient("chatDocs");
       LanggraphService.suggestionVectorStore =
         await LanggraphService.getVectorSearchClient("suggestionDocs");
-      await LanggraphService.chatVectorStore.addDocuments(splittedChatDocs, {
-        ids: LanggraphService.chatDocs.map((doc) => `${doc.id}-${v4()}` || ""),
-      });
+      const docsClient = await MongoService.getClient();
+      const docsCount = await docsClient
+        .db("aidf-be")
+        .collection("vector-store-chatdocs")
+        .countDocuments();
       console.log(
-        `[langgraph] Added ${splittedChatDocs.length} chat documents to vector store`
+        `[langgraph] Vector store chatDocs has ${docsCount} documents`
       );
-      await LanggraphService.suggestionVectorStore.addDocuments(
-        splittedSuggestionDocs,
-        {
-          ids: LanggraphService.suggestionDocs.map(
+      if (docsCount > 0) {
+        console.log("[langgraph] chatDocs already exists in vector store");
+      } else {
+        await LanggraphService.chatVectorStore.addDocuments(splittedChatDocs, {
+          ids: LanggraphService.chatDocs.map(
             (doc) => `${doc.id}-${v4()}` || ""
           ),
-        }
-      );
+        });
+        console.log(
+          `[langgraph] Added ${splittedChatDocs.length} chat documents to vector store`
+        );
+      }
+      const suggestionDocsCount = await docsClient
+        .db("aidf-be")
+        .collection("vector-store-suggestiondocs")
+        .countDocuments();
       console.log(
-        `[langgraph] Added ${splittedSuggestionDocs.length} suggestion documents to vector store`
+        `[langgraph] Vector store suggestionDocs has ${suggestionDocsCount} documents`
       );
+      if (suggestionDocsCount > 0) {
+        console.log(
+          "[langgraph] suggestionDocs already exists in vector store"
+        );
+      } else {
+        await LanggraphService.suggestionVectorStore.addDocuments(
+          splittedSuggestionDocs,
+          {
+            ids: LanggraphService.suggestionDocs.map(
+              (doc) => `${doc.id}-${v4()}` || ""
+            ),
+          }
+        );
+        console.log(
+          `[langgraph] Added ${splittedSuggestionDocs.length} suggestion documents to vector store`
+        );
+      }
       LanggraphService.originalQuestions = questions;
       console.log(
         `[langgraph] Loaded ${LanggraphService.originalQuestions.length} original questions`
@@ -219,6 +247,7 @@ Choices: ${question.choices.join(", ")}`,
     LanggraphService.chatAgent = createReactAgent({
       llm: LanggraphService.llm,
       tools: [retrieveChatDocs],
+      checkpointSaver: new MemorySaver(),
     });
   }
 
