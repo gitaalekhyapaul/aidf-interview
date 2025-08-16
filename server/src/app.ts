@@ -5,6 +5,7 @@ import { MongoService } from "./services/mongodb.service";
 import { LanggraphService } from "./services/langgraph.service";
 import { default as cookieParser } from "cookie-parser";
 import { router as chatRouter } from "./routes/chat.route";
+import { router as questionsRouter } from "./routes/questions.route";
 
 config();
 
@@ -14,6 +15,7 @@ app.use(Express.json());
 app.use(cookieParser());
 
 app.use("/chat", chatRouter);
+app.use("/questions", questionsRouter);
 
 Promise.all([MongoService.getInstance(), LanggraphService.getInstance()])
   .then(() => {

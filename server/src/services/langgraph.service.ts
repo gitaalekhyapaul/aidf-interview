@@ -30,7 +30,8 @@ export class LanggraphService {
     modelName: "voyage-3",
     inputType: "document",
   });
-
+  private static suggestionAgent: ReturnType<typeof createReactAgent> | null =
+    null;
   private static chatAgent: ReturnType<typeof createReactAgent> | null = null;
   private static chatDocs: Document[] = [];
   private static chatVectorStore: MongoDBAtlasVectorSearch | null = null;
@@ -67,11 +68,11 @@ Topic: ${question.topic}
 Subtopic: ${question.subtopic || "N/A"}
 Difficulty: ${question.difficulty}
 Question: ${question.question}
-Choices: ${question.choices.join(", ")}
+Choices: ${question.choices.join("|")}
 Correct Answer: ${question.correct_answer}
 Explanation: ${question.explanation}
 Formula Used: ${question.formula_used || "N/A"}
-Keywords: ${question.keywords ? question.keywords.join(", ") : "N/A"}
+Keywords: ${question.keywords ? question.keywords.join("|") : "N/A"}
 Image: ${question.image || "N/A"}
 LOS Reference: ${question.LOS_reference || "N/A"}`,
           metadata: {
@@ -90,14 +91,14 @@ Topic: ${question.topic}
 Subtopic: ${question.subtopic || "N/A"}
 Difficulty: ${question.difficulty}
 Question: ${question.question}
-Choices: ${question.choices.join(", ")}`,
+Choices: ${question.choices.join("|")}`,
           metadata: {
             id: question.id,
             topic: question.topic,
             subtopic: question.subtopic || "N/A",
             difficulty: question.difficulty,
             question: question.question,
-            choices: question.choices.join(", "),
+            choices: question.choices.join("|"),
           },
           id: question.id,
         });
@@ -211,6 +212,7 @@ Choices: ${question.choices.join(", ")}`,
     console.log("[langgraph] Initializing LanggraphService");
     await LanggraphService.loadDocuments();
     await LanggraphService.initChatAgent();
+    await LanggraphService.initSuggestionAgent();
     console.log("[langgraph] LanggraphService OK");
   }
 
@@ -229,7 +231,7 @@ Choices: ${question.choices.join(", ")}`,
     });
 
     const retrieveChatDocs = tool(
-      async ({ query }: { query: string }) => {
+      async ({ query }: z.infer<typeof chatRetrieverSchema>) => {
         const { chatRetriever } =
           await LanggraphService.buildEnsembleRetrievers();
         const retrievedDocs = await chatRetriever.invoke(query);
@@ -251,8 +253,8 @@ Choices: ${question.choices.join(", ")}`,
       checkpointSaver: new MongoDBSaver({
         client: mongoClient,
         dbName: "aidf-be",
-        checkpointCollectionName: "langgraph-checkpoints",
-        checkpointWritesCollectionName: "langgraph-checkpoint-writes",
+        checkpointCollectionName: "chat-checkpoints",
+        checkpointWritesCollectionName: "chat-checkpoint-writes",
       }),
     });
   }
@@ -271,6 +273,93 @@ Choices: ${question.choices.join(", ")}`,
     if (!aiResponse) {
       throw new Error("No AI response found in the messages");
     }
+    return aiResponse.content;
+  }
+
+  private static async initSuggestionAgent() {
+    const mongoClient = await MongoService.getClient();
+    const suggestionRetrieverSchema = z.object({
+      questionID: z
+        .string()
+        .describe("The ID of the question to retrieve suggestions for"),
+      userAnswer: z.string().describe("The user's answer to the question"),
+    });
+    const retrieveSuggestionDocs = tool(
+      async ({
+        questionID,
+        userAnswer,
+      }: z.infer<typeof suggestionRetrieverSchema>) => {
+        const { suggestionRetriever } =
+          await LanggraphService.buildEnsembleRetrievers();
+        const question = LanggraphService.originalQuestions.find(
+          (q) => q.id === questionID
+        );
+        if (!question) {
+          return {
+            isCorrect: false,
+            nextQuestion: null,
+          };
+        }
+        const retrievedDocs = await suggestionRetriever.invoke(
+          question.question,
+          {
+            metadata: {
+              id: question.id,
+              topic: question.topic,
+              subtopic: question.subtopic || "N/A",
+              difficulty: question.difficulty,
+            },
+          }
+        );
+        const isCorrect =
+          question.correct_answer.toLowerCase().trim() ===
+          userAnswer.toLowerCase().trim();
+        const nextQuestion =
+          retrievedDocs.find((doc) => doc.metadata.id !== questionID) || null;
+        return [JSON.stringify({ isCorrect, nextQuestion }), retrievedDocs];
+      },
+      {
+        name: "retrieve_suggestion_docs",
+        description:
+          "Retrieve suggestion documents based on a question ID and user answer",
+        schema: suggestionRetrieverSchema,
+        responseFormat: "content_and_artifact",
+      }
+    );
+    LanggraphService.suggestionAgent = createReactAgent({
+      llm: LanggraphService.llm,
+      tools: [retrieveSuggestionDocs],
+      checkpointSaver: new MongoDBSaver({
+        client: mongoClient,
+        dbName: "aidf-be",
+        checkpointCollectionName: "suggestion-checkpoints",
+        checkpointWritesCollectionName: "suggestion-checkpoint-writes",
+      }),
+    });
+  }
+  public async getSuggestionResponse(
+    questionID: string,
+    userAnswer: string,
+    thread_id: string
+  ) {
+    const response = await LanggraphService.suggestionAgent!.invoke(
+      {
+        messages: [
+          new HumanMessage(JSON.stringify({ questionID, userAnswer })),
+        ],
+      },
+      {
+        configurable: {
+          thread_id,
+        },
+      }
+    );
+    const res = [...response.messages].reverse();
+    const aiResponse = res.find((msg) => msg instanceof AIMessage);
+    if (!aiResponse) {
+      throw new Error("No AI response found in the messages");
+    }
+    console.dir(response.toolMessages, { depth: null });
     return aiResponse.content;
   }
 }
