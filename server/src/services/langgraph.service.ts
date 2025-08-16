@@ -14,7 +14,7 @@ import { AIMessage, HumanMessage } from "@langchain/core/messages";
 import { config } from "dotenv";
 import { Question } from "../@types";
 import { v4 } from "uuid";
-import { MemorySaver } from "@langchain/langgraph";
+import { MongoDBSaver } from "@langchain/langgraph-checkpoint-mongodb";
 
 config();
 
@@ -223,6 +223,7 @@ Choices: ${question.choices.join(", ")}`,
   }
 
   private static async initChatAgent() {
+    const mongoClient = await MongoService.getClient();
     const chatRetrieverSchema = z.object({
       query: z.string().describe("The query to search for in chat documents"),
     });
@@ -247,7 +248,12 @@ Choices: ${question.choices.join(", ")}`,
     LanggraphService.chatAgent = createReactAgent({
       llm: LanggraphService.llm,
       tools: [retrieveChatDocs],
-      checkpointSaver: new MemorySaver(),
+      checkpointSaver: new MongoDBSaver({
+        client: mongoClient,
+        dbName: "aidf-be",
+        checkpointCollectionName: "langgraph-checkpoints",
+        checkpointWritesCollectionName: "langgraph-checkpoint-writes",
+      }),
     });
   }
 
