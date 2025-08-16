@@ -27,7 +27,7 @@ const handlePostAnswer = async (
       userAnswer,
       thread_id
     );
-    return res.json({ response });
+    return res.json(response);
   } catch (error) {
     console.error("Error in handlePostAnswer:", error);
     return res.status(500).json({ error: "Internal server error" });

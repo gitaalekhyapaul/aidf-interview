@@ -10,7 +10,7 @@ import { EnsembleRetriever } from "langchain/retrievers/ensemble";
 import { z } from "zod";
 import { tool } from "@langchain/core/tools";
 import { createReactAgent } from "@langchain/langgraph/prebuilt";
-import { AIMessage, HumanMessage } from "@langchain/core/messages";
+import { AIMessage, HumanMessage, ToolMessage } from "@langchain/core/messages";
 import { config } from "dotenv";
 import { Question } from "../@types";
 import { v4 } from "uuid";
@@ -356,10 +356,21 @@ Choices: ${question.choices.join("|")}`,
     );
     const res = [...response.messages].reverse();
     const aiResponse = res.find((msg) => msg instanceof AIMessage);
-    if (!aiResponse) {
+    const toolResponse = res.find((msg) => msg instanceof ToolMessage);
+    if (!aiResponse || !toolResponse) {
       throw new Error("No AI response found in the messages");
     }
-    console.dir(response.toolMessages, { depth: null });
-    return aiResponse.content;
+    const toolContent = JSON.parse(toolResponse.content as string);
+    toolContent.nextQuestion.metadata.choices =
+      toolContent.nextQuestion.metadata.choices.split("|");
+    return {
+      isCorrect: toolContent.isCorrect,
+      nextQuestion: {
+        ...toolContent.nextQuestion.metadata,
+        id: toolContent.nextQuestion.id,
+      },
+      response: aiResponse.content,
+      thread_id: thread_id,
+    };
   }
 }
