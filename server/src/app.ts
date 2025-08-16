@@ -13,7 +13,7 @@ app.use(cors());
 app.use(Express.json());
 app.use(cookieParser());
 
-app.get("/chat", chatRouter);
+app.use("/chat", chatRouter);
 
 Promise.all([MongoService.getInstance(), LanggraphService.getInstance()])
   .then(() => {
