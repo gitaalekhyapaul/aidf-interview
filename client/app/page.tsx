@@ -44,15 +44,6 @@ export default function HomePage() {
                 Start Your Free Trial
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Button>
-
-              <Button
-                variant="outline"
-                size="lg"
-                className="text-lg px-8 py-6 font-semibold bg-transparent"
-                onClick={handleStartQuiz}
-              >
-                Test Your Knowledge
-              </Button>
             </div>
 
             <div className="mt-12 flex items-center justify-center gap-8 text-sm text-muted-foreground">
@@ -243,9 +234,9 @@ export default function HomePage() {
             <h3 className="font-serif text-2xl font-bold mb-4">CFA Exam Prep</h3>
             <p className="text-muted-foreground mb-6">Professional financial education platform for CFA candidates</p>
             <div className="flex justify-center gap-8 text-sm text-muted-foreground">
-              <span>© 2024 CFA Exam Prep</span>
+              <span>© 2025 CFA Exam Prep</span>
               <span>•</span>
-              <span>Built with v0</span>
+              <span>Built with ☕️ and ❤️</span>
             </div>
           </div>
         </div>

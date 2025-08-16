@@ -20,8 +20,7 @@ const dmSans = DM_Sans({
 
 export const metadata: Metadata = {
   title: "CFA Exam Prep - Master Your Finance Knowledge",
-  description: "Professional CFA exam preparation platform with comprehensive questions and AI-powered learning",
-  generator: "v0.app",
+  description: "Professional CFA exam preparation platform with comprehensive questions and AI-powered learning"
 }
 
 export default function RootLayout({
