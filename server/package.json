@@ -6,7 +6,8 @@
   "scripts": {
     "test": "exit 0",
     "start": "node dist/app.js",
-    "dev": "tsc-watch --onSuccess \"node dist/app.js\"",
+    "watch": "DEBUG=* node dist/app.js",
+    "dev": "tsc-watch --onSuccess \"npm run watch\"",
     "build": "tsc --project tsconfig.json"
   },
   "repository": {
@@ -19,18 +20,45 @@
   "author": "Gita Alekhya Paul",
   "license": "MIT",
   "dependencies": {
+    "@langchain/anthropic": "^0.3.26",
+    "@langchain/community": "^0.3.50",
+    "@langchain/core": "^0.3.70",
+    "@langchain/langgraph": "^0.4.5",
+    "@langchain/mongodb": "^0.1.0",
+    "@langchain/textsplitters": "^0.1.0",
     "axios": "^1.11.0",
+    "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
-    "dotenv": "^17.2.1",
+    "dotenv": "^16.4.5",
     "express": "^5.1.0",
-    "typescript": "^5.9.2"
+    "langchain": "^0.3.30",
+    "mongodb": "^6.18.0",
+    "redis": "^5.8.1",
+    "typescript": "^5.9.2",
+    "uuid": "^11.1.0",
+    "voyageai": "^0.0.5",
+    "zod": "^3.25.76"
   },
   "devDependencies": {
     "@types/axios": "^0.14.4",
+    "@types/cookie-parser": "^1.4.9",
     "@types/cors": "^2.8.19",
-    "@types/dotenv": "^8.2.3",
     "@types/express": "^5.0.3",
     "@types/node": "^24.2.1",
     "tsc-watch": "^7.1.1"
+  },
+  "engines": {
+    "node": ">=20.14.0"
+  },
+  "resolutions": {
+    "@langchain/core": "^0.3.70"
+  },
+  "overrides": {
+    "@langchain/core": "^0.3.70"
+  },
+  "pnpm": {
+    "overrides": {
+      "@langchain/core": "^0.3.70"
+    }
   }
 }

@@ -150,7 +150,12 @@
       "topic": "Financial Reporting & Analysis",
       "difficulty": "Medium",
       "question": "Under U.S. GAAP, which of the following is considered a cash equivalent?",
-      "choices": ["Accounts receivable", "Commercial paper maturing in 60 days", "Inventory", "Preferred stock"],
+      "choices": [
+        "Accounts receivable",
+        "Commercial paper maturing in 60 days",
+        "Inventory",
+        "Preferred stock"
+      ],
       "correct_answer": "Commercial paper maturing in 60 days",
       "explanation": "Cash equivalents are short-term, highly liquid investments with original maturities of 90 days or less, such as commercial paper.",
       "subtopic": "IFRS vs GAAP",
@@ -158,7 +163,12 @@
       "keywords": [],
       "LOS_reference": "FRA - Financial Reporting Standards",
       "image": null,
-      "options": ["Accounts receivable", "Commercial paper maturing in 60 days", "Inventory", "Preferred stock"]
+      "options": [
+        "Accounts receivable",
+        "Commercial paper maturing in 60 days",
+        "Inventory",
+        "Preferred stock"
+      ]
     },
     {
       "id": "GEN-005",
@@ -340,7 +350,12 @@
       "topic": "Financial Reporting & Analysis",
       "difficulty": "Hard",
       "question": "Which inventory method results in highest COGS during rising prices?",
-      "choices": ["FIFO", "LIFO", "Weighted Average", "Specific Identification"],
+      "choices": [
+        "FIFO",
+        "LIFO",
+        "Weighted Average",
+        "Specific Identification"
+      ],
       "correct_answer": "LIFO",
       "explanation": "LIFO uses most recent (higher) prices as COGS when prices rise, reducing net income and taxes.",
       "subtopic": "Inventory Valuation",
@@ -400,7 +415,12 @@
       "topic": "Derivatives",
       "difficulty": "Medium",
       "question": "Which option strategy profits most in a highly volatile market?",
-      "choices": ["Covered Call", "Protective Put", "Long Straddle", "Short Straddle"],
+      "choices": [
+        "Covered Call",
+        "Protective Put",
+        "Long Straddle",
+        "Short Straddle"
+      ],
       "correct_answer": "Long Straddle",
       "explanation": "A long straddle profits from large price movements in either direction due to dual option positions.",
       "subtopic": "General Concepts",
@@ -408,7 +428,12 @@
       "keywords": [],
       "LOS_reference": "LOS TBD",
       "image": null,
-      "options": ["Covered Call", "Protective Put", "Long Straddle", "Short Straddle"]
+      "options": [
+        "Covered Call",
+        "Protective Put",
+        "Long Straddle",
+        "Short Straddle"
+      ]
     },
     {
       "id": "ALT-002",
@@ -535,7 +560,12 @@
       "topic": "Alternative Investments",
       "difficulty": "Easy",
       "question": "Which alternative investment is most likely to use a high-water mark in compensation?",
-      "choices": ["Private equity", "Real estate funds", "Hedge funds", "Infrastructure funds"],
+      "choices": [
+        "Private equity",
+        "Real estate funds",
+        "Hedge funds",
+        "Infrastructure funds"
+      ],
       "correct_answer": "Hedge funds",
       "explanation": "Hedge funds often use high-water marks to ensure performance fees are earned only on new gains.",
       "subtopic": "Hedge Funds",
@@ -543,7 +573,12 @@
       "keywords": [],
       "LOS_reference": "Alternative Investments - Hedge Funds",
       "image": null,
-      "options": ["Private equity", "Real estate funds", "Hedge funds", "Infrastructure funds"]
+      "options": [
+        "Private equity",
+        "Real estate funds",
+        "Hedge funds",
+        "Infrastructure funds"
+      ]
     },
     {
       "id": "GEN-011",
@@ -650,7 +685,12 @@
       "topic": "Fixed Income",
       "difficulty": "Medium",
       "question": "Which risk is MOST associated with callable bonds?",
-      "choices": ["Reinvestment risk", "Default risk", "Inflation risk", "Currency risk"],
+      "choices": [
+        "Reinvestment risk",
+        "Default risk",
+        "Inflation risk",
+        "Currency risk"
+      ],
       "correct_answer": "Reinvestment risk",
       "explanation": "Callable bonds expose investors to reinvestment risk when interest rates decline and the bond is called early.",
       "subtopic": "Bond Pricing",
@@ -658,7 +698,12 @@
       "keywords": [],
       "LOS_reference": "Fixed Income - Bond Valuation",
       "image": null,
-      "options": ["Reinvestment risk", "Default risk", "Inflation risk", "Currency risk"]
+      "options": [
+        "Reinvestment risk",
+        "Default risk",
+        "Inflation risk",
+        "Currency risk"
+      ]
     },
     {
       "id": "ECON-004",
@@ -690,7 +735,12 @@
       "topic": "Alternative Investments",
       "difficulty": "Medium",
       "question": "Which feature is most characteristic of private equity investments?",
-      "choices": ["High liquidity", "Frequent pricing", "Long lock-up periods", "Low risk-adjusted returns"],
+      "choices": [
+        "High liquidity",
+        "Frequent pricing",
+        "Long lock-up periods",
+        "Low risk-adjusted returns"
+      ],
       "correct_answer": "Long lock-up periods",
       "explanation": "Private equity investments typically involve long-term commitments with illiquid positions.",
       "subtopic": "Private Equity",
@@ -698,7 +748,12 @@
       "keywords": [],
       "LOS_reference": "Alternative Investments - Private Equity",
       "image": null,
-      "options": ["High liquidity", "Frequent pricing", "Long lock-up periods", "Low risk-adjusted returns"]
+      "options": [
+        "High liquidity",
+        "Frequent pricing",
+        "Long lock-up periods",
+        "Low risk-adjusted returns"
+      ]
     },
     {
       "id": "GEN-015",
@@ -820,7 +875,12 @@
       "topic": "Financial Reporting & Analysis",
       "difficulty": "Hard",
       "question": "Which of the following best describes the effect of using LIFO instead of FIFO in an inflationary environment?",
-      "choices": ["Higher net income", "Lower cost of goods sold", "Higher ending inventory", "Lower taxable income"],
+      "choices": [
+        "Higher net income",
+        "Lower cost of goods sold",
+        "Higher ending inventory",
+        "Lower taxable income"
+      ],
       "correct_answer": "Lower taxable income",
       "explanation": "LIFO reports higher COGS in inflation, reducing taxable income compared to FIFO.",
       "subtopic": "Inventory Valuation",
@@ -828,7 +888,12 @@
       "keywords": [],
       "LOS_reference": "FRA - Inventories",
       "image": null,
-      "options": ["Higher net income", "Lower cost of goods sold", "Higher ending inventory", "Lower taxable income"]
+      "options": [
+        "Higher net income",
+        "Lower cost of goods sold",
+        "Higher ending inventory",
+        "Lower taxable income"
+      ]
     },
     {
       "id": "GEN-018",
@@ -940,7 +1005,12 @@
       "topic": "Economics",
       "difficulty": "Medium",
       "question": "In the long run, a perfectly competitive firm earns:",
-      "choices": ["Positive economic profit", "Zero economic profit", "Negative economic profit", "Monopoly profits"],
+      "choices": [
+        "Positive economic profit",
+        "Zero economic profit",
+        "Negative economic profit",
+        "Monopoly profits"
+      ],
       "correct_answer": "Zero economic profit",
       "explanation": "In the long run, firms enter or exit the market until only normal profit (zero economic profit) remains.",
       "subtopic": "Microeconomics - Perfect Competition",
@@ -948,14 +1018,24 @@
       "keywords": [],
       "LOS_reference": "Economics - Market Structures",
       "image": null,
-      "options": ["Positive economic profit", "Zero economic profit", "Negative economic profit", "Monopoly profits"]
+      "options": [
+        "Positive economic profit",
+        "Zero economic profit",
+        "Negative economic profit",
+        "Monopoly profits"
+      ]
     },
     {
       "id": "PM-005",
       "topic": "Portfolio Management",
       "difficulty": "Easy",
       "question": "The primary benefit of diversification is:",
-      "choices": ["Increased returns", "Lower taxes", "Reduced portfolio risk", "Eliminated market risk"],
+      "choices": [
+        "Increased returns",
+        "Lower taxes",
+        "Reduced portfolio risk",
+        "Eliminated market risk"
+      ],
       "correct_answer": "Reduced portfolio risk",
       "explanation": "Diversification reduces unsystematic risk but does not eliminate market (systematic) risk.",
       "subtopic": "Risk and Return",
@@ -963,14 +1043,24 @@
       "keywords": [],
       "LOS_reference": "Portfolio Management - Risk and Return Analysis",
       "image": null,
-      "options": ["Increased returns", "Lower taxes", "Reduced portfolio risk", "Eliminated market risk"]
+      "options": [
+        "Increased returns",
+        "Lower taxes",
+        "Reduced portfolio risk",
+        "Eliminated market risk"
+      ]
     },
     {
       "id": "DER-005",
       "topic": "Derivatives",
       "difficulty": "Medium",
       "question": "A call option has an exercise price of $50. If the stock is trading at $60, the option is:",
-      "choices": ["At the money", "Out of the money", "In the money", "Underwater"],
+      "choices": [
+        "At the money",
+        "Out of the money",
+        "In the money",
+        "Underwater"
+      ],
       "correct_answer": "In the money",
       "explanation": "A call is in the money if the stock price is above the exercise price.",
       "subtopic": "Options",
@@ -978,14 +1068,24 @@
       "keywords": [],
       "LOS_reference": "Derivatives - Options and Valuation",
       "image": null,
-      "options": ["At the money", "Out of the money", "In the money", "Underwater"]
+      "options": [
+        "At the money",
+        "Out of the money",
+        "In the money",
+        "Underwater"
+      ]
     },
     {
       "id": "ALT-005",
       "topic": "Alternative Investments",
       "difficulty": "Easy",
       "question": "Which asset class is most likely to use appraisal-based valuations?",
-      "choices": ["Commodities", "Private equity", "Real estate", "Hedge funds"],
+      "choices": [
+        "Commodities",
+        "Private equity",
+        "Real estate",
+        "Hedge funds"
+      ],
       "correct_answer": "Real estate",
       "explanation": "Real estate is typically valued using appraisals, especially when illiquid.",
       "subtopic": "Real Estate Valuation",
@@ -1015,7 +1115,12 @@
       "topic": "Corporate Issuers",
       "difficulty": "Medium",
       "question": "The cost of equity using the CAPM is calculated as:",
-      "choices": ["Rf + \u03b2 \u00d7 (Rm - Rf)", "WACC \u00d7 Debt Ratio", "Earnings / Price", "D1 / P0 + g"],
+      "choices": [
+        "Rf + \u03b2 \u00d7 (Rm - Rf)",
+        "WACC \u00d7 Debt Ratio",
+        "Earnings / Price",
+        "D1 / P0 + g"
+      ],
       "correct_answer": "Rf + \u03b2 \u00d7 (Rm - Rf)",
       "explanation": "CAPM formula: Cost of Equity = Risk-free rate + Beta \u00d7 Market risk premium.",
       "subtopic": "General Concepts",
@@ -1023,7 +1128,12 @@
       "keywords": [],
       "LOS_reference": "LOS TBD",
       "image": null,
-      "options": ["Rf + \u03b2 \u00d7 (Rm - Rf)", "WACC \u00d7 Debt Ratio", "Earnings / Price", "D1 / P0 + g"]
+      "options": [
+        "Rf + \u03b2 \u00d7 (Rm - Rf)",
+        "WACC \u00d7 Debt Ratio",
+        "Earnings / Price",
+        "D1 / P0 + g"
+      ]
     },
     {
       "id": "GEN-022",
@@ -1095,7 +1205,12 @@
       "topic": "Economics",
       "difficulty": "Medium",
       "question": "In the long run, an increase in the money supply most likely leads to:",
-      "choices": ["Higher real GDP", "Lower unemployment", "Increased inflation", "Lower nominal interest rates"],
+      "choices": [
+        "Higher real GDP",
+        "Lower unemployment",
+        "Increased inflation",
+        "Lower nominal interest rates"
+      ],
       "correct_answer": "Increased inflation",
       "explanation": "According to the quantity theory of money, in the long run, increases in the money supply are inflationary.",
       "subtopic": "Microeconomics - Supply and Demand",
@@ -1103,7 +1218,12 @@
       "keywords": [],
       "LOS_reference": "Economics - Microeconomic Analysis",
       "image": null,
-      "options": ["Higher real GDP", "Lower unemployment", "Increased inflation", "Lower nominal interest rates"]
+      "options": [
+        "Higher real GDP",
+        "Lower unemployment",
+        "Increased inflation",
+        "Lower nominal interest rates"
+      ]
     },
     {
       "id": "GEN-024",
@@ -1135,7 +1255,12 @@
       "topic": "Corporate Issuers",
       "difficulty": "Easy",
       "question": "Which of the following is least likely a factor affecting a firm\u2019s capital structure?",
-      "choices": ["Tax rates", "Dividend policy", "Financial flexibility", "Operating leverage"],
+      "choices": [
+        "Tax rates",
+        "Dividend policy",
+        "Financial flexibility",
+        "Operating leverage"
+      ],
       "correct_answer": "Dividend policy",
       "explanation": "Capital structure decisions focus more on financing choices and risk than dividend distribution.",
       "subtopic": "General Concepts",
@@ -1143,7 +1268,12 @@
       "keywords": [],
       "LOS_reference": "LOS TBD",
       "image": null,
-      "options": ["Tax rates", "Dividend policy", "Financial flexibility", "Operating leverage"]
+      "options": [
+        "Tax rates",
+        "Dividend policy",
+        "Financial flexibility",
+        "Operating leverage"
+      ]
     },
     {
       "id": "GEN-026",
@@ -1205,7 +1335,12 @@
       "topic": "Alternative Investments",
       "difficulty": "Easy",
       "question": "Which investment vehicle offers the highest transparency and liquidity?",
-      "choices": ["Private equity", "Hedge funds", "REITs", "Commodities futures"],
+      "choices": [
+        "Private equity",
+        "Hedge funds",
+        "REITs",
+        "Commodities futures"
+      ],
       "correct_answer": "REITs",
       "explanation": "REITs are publicly traded and required to disclose financial information, offering more transparency.",
       "subtopic": "General Concepts",
@@ -1213,7 +1348,12 @@
       "keywords": [],
       "LOS_reference": "LOS TBD",
       "image": null,
-      "options": ["Private equity", "Hedge funds", "REITs", "Commodities futures"]
+      "options": [
+        "Private equity",
+        "Hedge funds",
+        "REITs",
+        "Commodities futures"
+      ]
     },
     {
       "id": "PM-006",
@@ -1500,7 +1640,12 @@
       "topic": "Alternative Investments",
       "difficulty": "Easy",
       "question": "Which of the following investments is LEAST liquid?",
-      "choices": ["Listed REIT", "Private equity", "Publicly traded ETF", "Gold futures"],
+      "choices": [
+        "Listed REIT",
+        "Private equity",
+        "Publicly traded ETF",
+        "Gold futures"
+      ],
       "correct_answer": "Private equity",
       "explanation": "Private equity typically has long lock-up periods, making it less liquid than publicly traded alternatives.",
       "subtopic": "General Concepts",
@@ -1508,7 +1653,12 @@
       "keywords": [],
       "LOS_reference": "LOS TBD",
       "image": null,
-      "options": ["Listed REIT", "Private equity", "Publicly traded ETF", "Gold futures"]
+      "options": [
+        "Listed REIT",
+        "Private equity",
+        "Publicly traded ETF",
+        "Gold futures"
+      ]
     },
     {
       "id": "PM-007",
@@ -1595,7 +1745,12 @@
       "topic": "Financial Reporting & Analysis",
       "difficulty": "Easy",
       "question": "Under US GAAP, which inventory method is allowed but prohibited under IFRS?",
-      "choices": ["FIFO", "LIFO", "Weighted average", "Specific identification"],
+      "choices": [
+        "FIFO",
+        "LIFO",
+        "Weighted average",
+        "Specific identification"
+      ],
       "correct_answer": "LIFO",
       "explanation": "LIFO is allowed under US GAAP but not permitted under IFRS standards.",
       "subtopic": "Inventory Valuation",
@@ -1675,7 +1830,12 @@
       "topic": "Quantitative Methods",
       "difficulty": "Medium",
       "question": "If the sample mean is 8, standard deviation is 2, and sample size is 25, what is the 95% confidence interval for the mean?",
-      "choices": ["[7.22, 8.78]", "[6.50, 9.50]", "[7.21, 8.79]", "[7.00, 9.00]"],
+      "choices": [
+        "[7.22, 8.78]",
+        "[6.50, 9.50]",
+        "[7.21, 8.79]",
+        "[7.00, 9.00]"
+      ],
       "correct_answer": "[7.22, 8.78]",
       "explanation": "CI = x\u0304 \u00b1 z(\u03c3/\u221an); 8 \u00b1 1.96(2/\u221a25) = 8 \u00b1 0.78 = [7.22, 8.78]",
       "subtopic": "Risk Metrics",
@@ -1683,7 +1843,12 @@
       "keywords": [],
       "LOS_reference": "Quantitative Methods - Risk and Return",
       "image": null,
-      "options": ["[7.22, 8.78]", "[6.50, 9.50]", "[7.21, 8.79]", "[7.00, 9.00]"]
+      "options": [
+        "[7.22, 8.78]",
+        "[6.50, 9.50]",
+        "[7.21, 8.79]",
+        "[7.00, 9.00]"
+      ]
     },
     {
       "id": "ECON-009",
@@ -1780,7 +1945,12 @@
       "topic": "Fixed Income",
       "difficulty": "Medium",
       "question": "Which of the following bond features reduces reinvestment risk?",
-      "choices": ["Zero-coupon bond", "Callable bond", "Putable bond", "Floating-rate bond"],
+      "choices": [
+        "Zero-coupon bond",
+        "Callable bond",
+        "Putable bond",
+        "Floating-rate bond"
+      ],
       "correct_answer": "Zero-coupon bond",
       "explanation": "Zero-coupon bonds pay no coupons, thus avoiding reinvestment risk on interim payments.",
       "subtopic": "Bond Pricing",
@@ -1788,7 +1958,12 @@
       "keywords": [],
       "LOS_reference": "Fixed Income - Bond Valuation",
       "image": null,
-      "options": ["Zero-coupon bond", "Callable bond", "Putable bond", "Floating-rate bond"]
+      "options": [
+        "Zero-coupon bond",
+        "Callable bond",
+        "Putable bond",
+        "Floating-rate bond"
+      ]
     },
     {
       "id": "DER-008",
@@ -1820,7 +1995,12 @@
       "topic": "Alternative Investments",
       "difficulty": "Medium",
       "question": "Which is a key risk associated with private equity investing?",
-      "choices": ["High liquidity", "Daily pricing transparency", "Long investment horizon", "Minimal due diligence"],
+      "choices": [
+        "High liquidity",
+        "Daily pricing transparency",
+        "Long investment horizon",
+        "Minimal due diligence"
+      ],
       "correct_answer": "Long investment horizon",
       "explanation": "Private equity investments are illiquid with long lock-up periods.",
       "subtopic": "Private Equity",
@@ -1828,7 +2008,12 @@
       "keywords": [],
       "LOS_reference": "Alternative Investments - Private Equity",
       "image": null,
-      "options": ["High liquidity", "Daily pricing transparency", "Long investment horizon", "Minimal due diligence"]
+      "options": [
+        "High liquidity",
+        "Daily pricing transparency",
+        "Long investment horizon",
+        "Minimal due diligence"
+      ]
     },
     {
       "id": "PM-008",
