@@ -3,6 +3,7 @@ import cors from "cors";
 import { config } from "dotenv";
 import { MongoService } from "./services/mongodb.service";
 import { LanggraphService } from "./services/langgraph.service";
+import { RedisService } from "./services/redis.service";
 import { default as cookieParser } from "cookie-parser";
 import { router as chatRouter } from "./routes/chat.route";
 import { router as questionsRouter } from "./routes/questions.route";
@@ -17,11 +18,15 @@ app.use(cookieParser());
 app.use("/chat", chatRouter);
 app.use("/questions", questionsRouter);
 
-Promise.all([MongoService.getInstance(), LanggraphService.getInstance()])
+Promise.all([
+  MongoService.getInstance(),
+  LanggraphService.getInstance(),
+  RedisService.getInstance(),
+])
   .then(() => {
     app.listen(process.env.PORT || 8080, () => {
       console.log(
-        `Server is running on http://localhost:${process.env.PORT || 8080}`
+        `[server] Server is running on http://localhost:${process.env.PORT || 8080}`
       );
     });
   })

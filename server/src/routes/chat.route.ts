@@ -2,6 +2,7 @@ import Express, { Request, Response, NextFunction } from "express";
 import { v4 } from "uuid";
 export const router = Express.Router();
 import { LanggraphService } from "../services/langgraph.service";
+import { RedisService } from "../services/redis.service";
 const handlePostChat = async (
   req: Request,
   res: Response,
@@ -28,4 +29,28 @@ const handlePostChat = async (
   }
 };
 
+export const handleGetChat = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const thread_id = req.cookies?.thread_id;
+    if (!thread_id) {
+      return res.status(400).json({ error: "Thread ID is required" });
+    }
+    const service = await RedisService.getInstance();
+    const redisClient = await service.getClient();
+    const chatData = await redisClient.get(`chat:${thread_id}`);
+    if (!chatData) {
+      return res.status(404).json({ error: "Chat not found" });
+    }
+    return res.json(JSON.parse(chatData));
+  } catch (error) {
+    console.error("Error in handleGetChat:", error);
+    return res.status(500).json({ error: "Internal server error" });
+  }
+};
+
 router.post("/", handlePostChat);
+router.get("/", handleGetChat);

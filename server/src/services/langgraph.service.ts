@@ -10,11 +10,17 @@ import { EnsembleRetriever } from "langchain/retrievers/ensemble";
 import { z } from "zod";
 import { tool } from "@langchain/core/tools";
 import { createReactAgent } from "@langchain/langgraph/prebuilt";
-import { AIMessage, HumanMessage, ToolMessage } from "@langchain/core/messages";
+import {
+  AIMessage,
+  HumanMessage,
+  ToolMessage,
+  filterMessages,
+} from "@langchain/core/messages";
 import { config } from "dotenv";
 import { Question } from "../@types";
 import { v4 } from "uuid";
 import { MongoDBSaver } from "@langchain/langgraph-checkpoint-mongodb";
+import { RedisService } from "./redis.service";
 
 config();
 
@@ -23,7 +29,7 @@ export class LanggraphService {
   private static llm = new ChatAnthropic({
     model: "claude-3-5-haiku-20241022",
     apiKey: process.env.ANTHROPIC_API_KEY || "",
-    temperature: 0,
+    temperature: 0.7,
   });
   private static embeddings = new VoyageEmbeddings({
     apiKey: process.env.VOYAGEAI_API_KEY || "",
@@ -269,6 +275,16 @@ Choices: ${question.choices.join("|")}`,
       }
     );
     const res = [...response.messages].reverse();
+    const messages = filterMessages(res, {
+      includeTypes: ["ai", "human"],
+    });
+    await RedisService.getInstance();
+    const redis = await RedisService.getInstance();
+    const redisClient = await redis.getClient();
+    await redisClient.set(
+      `chat:${thread_id}`,
+      JSON.stringify(messages.map((msg) => msg.toDict()))
+    );
     const aiResponse = res.find((msg) => msg instanceof AIMessage);
     if (!aiResponse) {
       throw new Error("No AI response found in the messages");
