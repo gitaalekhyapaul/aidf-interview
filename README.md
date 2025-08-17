@@ -1,5 +1,8 @@
 # aidf-interview
 
+# Preview Link
+https://aidf.gpaul.cc/quiz
+
 # System Architecture
 
 ![System Architecture](./docs/architecture.png)
