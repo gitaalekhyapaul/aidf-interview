@@ -1,7 +1,7 @@
 # aidf-interview
 
 # Preview Link
-https://aidf.gpaul.cc/quiz
+https://aidf.gpaul.cc
 
 # System Architecture
 
