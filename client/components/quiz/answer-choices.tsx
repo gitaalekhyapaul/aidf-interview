@@ -61,7 +61,7 @@ export function AnswerChoices({
               variant="outline"
               className={`w-full justify-start text-left h-auto p-4 text-sm sm:text-base ${getAnswerStyle(
                 option
-              )} hover:text-teal-200`}
+              )} hover:text-teal-200 break-words whitespace-normal`}
               onClick={() => !showFeedback && onAnswerSelect(option)}
               disabled={showFeedback}
             >
