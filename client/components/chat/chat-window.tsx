@@ -4,10 +4,10 @@ import { Card } from "@/components/ui/card"
 import { ChatHeader } from "./chat-header"
 import { MessageList } from "./message-list"
 import { ChatInput } from "./chat-input"
-import type { Message } from "@/contexts/chat-context"
+import type { ChatMessage } from "@/@types"
 
 interface ChatWindowProps {
-  messages: Message[]
+  messages: ChatMessage[]
   isTyping: boolean
   onSendMessage: (message: string) => void
   onMinimize: () => void

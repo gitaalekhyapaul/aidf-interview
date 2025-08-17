@@ -2,10 +2,11 @@
 
 import { useEffect, useRef } from "react"
 import { Bot, User } from "lucide-react"
-import type { Message } from "@/contexts/chat-context"
+import type { ChatMessage } from "@/@types"
+import {v4} from "uuid"
 
 interface MessageListProps {
-  messages: Message[]
+  messages: ChatMessage[]
   isTyping: boolean
 }
 
@@ -19,26 +20,20 @@ export function MessageList({ messages, isTyping }: MessageListProps) {
   return (
     <div className="flex-1 overflow-y-auto p-4 space-y-4">
       {messages.map((message) => (
-        <div key={message.id} className={`flex gap-3 ${message.sender === "user" ? "justify-end" : "justify-start"}`}>
-          {message.sender === "ai" && (
+        <div key={v4()} className={`flex gap-3 ${message.type === "human" ? "justify-end" : "justify-start"}`}>
+          {message.type === "ai" && (
             <div className="h-6 w-6 rounded-full bg-primary flex items-center justify-center flex-shrink-0 mt-1">
               <Bot className="h-3 w-3 text-primary-foreground" />
             </div>
           )}
           <div
             className={`max-w-[80%] rounded-lg p-3 text-sm ${
-              message.sender === "user" ? "bg-primary text-primary-foreground" : "bg-muted text-foreground"
+              message.type === "human" ? "bg-primary text-primary-foreground" : "bg-muted text-foreground"
             }`}
           >
-            <p className="whitespace-pre-wrap leading-relaxed">{message.content}</p>
-            <p className="text-xs opacity-70 mt-1">
-              {new Date(message.timestamp).toLocaleTimeString([], {
-                hour: "2-digit",
-                minute: "2-digit",
-              })}
-            </p>
+            <p className="whitespace-pre-wrap leading-relaxed">{message.data.content}</p>
           </div>
-          {message.sender === "user" && (
+          {message.type === "human" && (
             <div className="h-6 w-6 rounded-full bg-muted flex items-center justify-center flex-shrink-0 mt-1">
               <User className="h-3 w-3 text-foreground" />
             </div>

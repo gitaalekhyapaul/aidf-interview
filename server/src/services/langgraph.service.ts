@@ -377,14 +377,16 @@ Choices: ${question.choices.join("|")}`,
       throw new Error("No AI response found in the messages");
     }
     const toolContent = JSON.parse(toolResponse.content as string);
-    toolContent.nextQuestion.metadata.choices =
-      toolContent.nextQuestion.metadata.choices.split("|");
+    const nextQuestionID = toolContent.nextQuestion.id;
+    const nextQuestion = LanggraphService.originalQuestions.find(
+      (q) => q.id === nextQuestionID
+    );
+    if (!nextQuestion) {
+      throw new Error("Next question not found in original questions");
+    }
     return {
       isCorrect: toolContent.isCorrect,
-      nextQuestion: {
-        ...toolContent.nextQuestion.metadata,
-        id: toolContent.nextQuestion.id,
-      },
+      nextQuestion: nextQuestion,
       response: aiResponse.content,
       thread_id: thread_id,
     };

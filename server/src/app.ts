@@ -1,4 +1,4 @@
-import Express, { Request, Response } from "express";
+import Express, { NextFunction, Request, Response } from "express";
 import cors from "cors";
 import { config } from "dotenv";
 import { MongoService } from "./services/mongodb.service";
@@ -17,6 +17,10 @@ app.use(cookieParser());
 
 app.use("/chat", chatRouter);
 app.use("/questions", questionsRouter);
+app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
+  console.error("Error:", err);
+  res.status(500).json({ error: "Internal server error" });
+});
 
 Promise.all([
   MongoService.getInstance(),
@@ -26,7 +30,9 @@ Promise.all([
   .then(() => {
     app.listen(process.env.PORT || 8080, () => {
       console.log(
-        `[server] Server is running on http://localhost:${process.env.PORT || 8080}`
+        `[server] Server is running on http://localhost:${
+          process.env.PORT || 8080
+        }`
       );
     });
   })

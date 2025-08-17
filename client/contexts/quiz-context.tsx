@@ -1,37 +1,27 @@
-"use client"
+"use client";
 
-import React, { createContext, useContext, useReducer, type ReactNode } from "react"
-import { quizApi, analyticsApi } from "@/lib/mock-api"
-
-interface Question {
-  id: string
-  topic: string
-  difficulty: string
-  question: string
-  choices: string[]
-  correct_answer: string
-  explanation: string
-  subtopic: string
-  formula_used: string
-  keywords: string[]
-  LOS_reference: string
-  image: string | null
-  options: string[]
-}
+import React, {
+  createContext,
+  useContext,
+  useReducer,
+  type ReactNode,
+} from "react";
+import { Api } from "@/lib/api";
+import { Question } from "@/@types";
 
 interface QuizState {
-  questions: Question[]
-  currentQuestionIndex: number
-  selectedAnswer: string | null
-  showExplanation: boolean
-  showFeedback: boolean
-  score: number
-  answeredQuestions: number
-  isQuizComplete: boolean
-  userAnswers: { questionId: string; answer: string; isCorrect: boolean }[]
-  quizStarted: boolean
-  isLoading: boolean
-  error: string | null
+  questions: Question[];
+  currentQuestionIndex: number;
+  selectedAnswer: string | null;
+  showExplanation: boolean;
+  showFeedback: boolean;
+  score: number;
+  answeredQuestions: number;
+  isQuizComplete: boolean;
+  userAnswers: { questionId: string; answer: string; isCorrect: boolean }[];
+  quizStarted: boolean;
+  isLoading: boolean;
+  error: string | null;
 }
 
 type QuizAction =
@@ -45,6 +35,7 @@ type QuizAction =
   | { type: "NEXT_QUESTION" }
   | { type: "RESET_QUIZ" }
   | { type: "REQUEST_SIMILAR_QUESTION" }
+  | { type: "FINISH_QUIZ" };
 
 const initialState: QuizState = {
   questions: [],
@@ -59,29 +50,29 @@ const initialState: QuizState = {
   quizStarted: false,
   isLoading: false,
   error: null,
-}
+};
 
 function quizReducer(state: QuizState, action: QuizAction): QuizState {
   switch (action.type) {
     case "START_QUIZ":
       return {
-        ...initialState,
+        ...state,
         quizStarted: true,
         isLoading: true,
-      }
+      };
 
     case "SET_LOADING":
       return {
         ...state,
         isLoading: action.loading,
-      }
+      };
 
     case "SET_ERROR":
       return {
         ...state,
         error: action.error,
         isLoading: false,
-      }
+      };
 
     case "SET_QUESTIONS":
       return {
@@ -89,18 +80,18 @@ function quizReducer(state: QuizState, action: QuizAction): QuizState {
         questions: action.questions,
         isLoading: false,
         error: null,
-      }
+      };
 
     case "SELECT_ANSWER":
       return {
         ...state,
         selectedAnswer: action.answer,
-      }
+      };
 
     case "SHOW_FEEDBACK":
-      const currentQuestion = state.questions[state.currentQuestionIndex]
-      const isCorrect = state.selectedAnswer === currentQuestion.correct_answer
-      const newScore = isCorrect ? state.score + 1 : state.score
+      const currentQuestion = state.questions[state.currentQuestionIndex];
+      const isCorrect = state.selectedAnswer === currentQuestion.correct_answer;
+      const newScore = isCorrect ? state.score + 1 : state.score;
 
       return {
         ...state,
@@ -115,17 +106,17 @@ function quizReducer(state: QuizState, action: QuizAction): QuizState {
             isCorrect,
           },
         ],
-      }
+      };
 
     case "SHOW_EXPLANATION":
       return {
         ...state,
         showExplanation: true,
-      }
+      };
 
     case "NEXT_QUESTION":
-      const nextIndex = state.currentQuestionIndex + 1
-      const isComplete = nextIndex >= state.questions.length
+      const nextIndex = state.currentQuestionIndex + 1;
+      const isComplete = nextIndex >= 10;
 
       return {
         ...state,
@@ -134,54 +125,67 @@ function quizReducer(state: QuizState, action: QuizAction): QuizState {
         showExplanation: false,
         showFeedback: false,
         isQuizComplete: isComplete,
-      }
+      };
 
     case "RESET_QUIZ":
       return {
         ...initialState,
-      }
+      };
+
+    case "FINISH_QUIZ":
+      return {
+        ...state,
+        isQuizComplete: true,
+      };
 
     case "REQUEST_SIMILAR_QUESTION":
       return {
         ...state,
         isLoading: true,
-      }
+      };
 
     default:
-      return state
+      return state;
   }
 }
 
 const QuizContext = createContext<{
-  state: QuizState
-  dispatch: React.Dispatch<QuizAction>
-  startQuiz: () => Promise<void>
-  submitQuizResults: () => Promise<void>
-  requestSimilarQuestion: (questionId: string) => Promise<void>
-} | null>(null)
+  state: QuizState;
+  dispatch: React.Dispatch<QuizAction>;
+  startQuiz: () => Promise<void>;
+  submitQuizResults: () => Promise<void>;
+  requestSimilarQuestion: (
+    questionId: string,
+    userAnswer: string
+  ) => Promise<void>;
+  getNextQuestion: () => Promise<void>;
+} | null>(null);
 
 export function QuizProvider({ children }: { children: ReactNode }) {
-  const [state, dispatch] = useReducer(quizReducer, initialState)
+  const [state, dispatch] = useReducer(quizReducer, initialState);
 
   const startQuiz = async () => {
-    dispatch({ type: "START_QUIZ" })
+    console.log("startQuiz called");
+    dispatch({ type: "START_QUIZ" });
 
     try {
-      await analyticsApi.trackInteraction("quiz_started", { timestamp: new Date() })
-      const response = await quizApi.getQuizQuestions(10)
-
-      if (response.success) {
-        dispatch({ type: "SET_QUESTIONS", questions: response.data })
+      const quizApi = Api.getInstance();
+      const response = await quizApi.getNextQuestion();
+      console.log("startQuiz response:", response);
+      if (response != null && response.id.length > 0) {
+        dispatch({ type: "SET_QUESTIONS", questions: [response] });
       } else {
-        dispatch({ type: "SET_ERROR", error: response.message || "Failed to load questions" })
+        dispatch({ type: "SET_ERROR", error: "Failed to load questions" });
       }
-    } catch (error) {
-      dispatch({ type: "SET_ERROR", error: "Network error occurred" })
+      dispatch({ type: "SET_LOADING", loading: false });
+    } catch (_err) {
+      console.error("Failed to start quiz:", _err);
+      dispatch({ type: "SET_ERROR", error: "Network error occurred" });
     }
-  }
+  };
 
   const submitQuizResults = async () => {
-    if (!state.isQuizComplete) return
+    if (!state.isQuizComplete) return;
 
     try {
       const quizSession = {
@@ -189,47 +193,68 @@ export function QuizProvider({ children }: { children: ReactNode }) {
         score: state.score,
         userAnswers: state.userAnswers,
         startTime: new Date(),
-      }
-
-      const response = await quizApi.submitQuizResults(quizSession)
-
-      if (response.success) {
-        await analyticsApi.trackInteraction("quiz_completed", {
-          score: state.score,
-          totalQuestions: state.questions.length,
-          percentage: Math.round((state.score / state.questions.length) * 100),
-        })
-      }
+      };
+      console.log("Submitting quiz results:", quizSession);
     } catch (error) {
-      console.error("Failed to submit quiz results:", error)
+      console.error("Failed to submit quiz results:", error);
     }
-  }
+  };
 
-  const requestSimilarQuestion = async (questionId: string) => {
-    dispatch({ type: "REQUEST_SIMILAR_QUESTION" })
+  const requestSimilarQuestion = async (
+    questionId: string,
+    userAnswer: string
+  ) => {
+    dispatch({ type: "REQUEST_SIMILAR_QUESTION" });
 
     try {
-      const response = await quizApi.getSimilarQuestions(questionId, 1)
+      const quizApi = Api.getInstance();
+      const response = await quizApi.submitAnswer(questionId, userAnswer);
 
-      if (response.success && response.data.length > 0) {
-        const newQuestions = [...state.questions]
-        newQuestions[state.currentQuestionIndex] = response.data[0]
-        dispatch({ type: "SET_QUESTIONS", questions: newQuestions })
-
-        await analyticsApi.trackInteraction("similar_question_requested", { questionId })
+      if (response != null && response.nextQuestion != null) {
+        const newQuestions = [...state.questions, response.nextQuestion];
+        dispatch({ type: "SET_QUESTIONS", questions: newQuestions });
       } else {
-        dispatch({ type: "SET_ERROR", error: "No similar questions available" })
+        dispatch({
+          type: "SET_ERROR",
+          error: "No similar questions available",
+        });
       }
-    } catch (error) {
-      dispatch({ type: "SET_ERROR", error: "Failed to load similar question" })
+    } catch (_err) {
+      console.error("Failed to request similar question:", _err);
+      dispatch({ type: "SET_ERROR", error: "Failed to load similar question" });
     }
-  }
+  };
 
-  React.useEffect(() => {
-    if (state.isQuizComplete && state.userAnswers.length > 0) {
-      submitQuizResults()
+  const getNextQuestion = async () => {
+    dispatch({ type: "SET_LOADING", loading: true });
+    try {
+      const quizApi = Api.getInstance();
+      const nextQuestion = await quizApi.getNextQuestion();
+
+      if (nextQuestion) {
+        dispatch({
+          type: "SET_QUESTIONS",
+          questions: [...state.questions, nextQuestion],
+        });
+      } else {
+        dispatch({ type: "SET_ERROR", error: "No more questions available" });
+      }
+      dispatch({ type: "SET_LOADING", loading: false });
+    } catch (_err) {
+      console.error("Failed to get next question:", _err);
+      dispatch({ type: "SET_ERROR", error: "Network error occurred" });
     }
-  }, [state.isQuizComplete])
+  };
+
+  // React.useEffect(() => {
+  //   if (state.isQuizComplete && state.userAnswers.length > 0) {
+  //     submitQuizResults()
+  //   }
+  // }, [state.isQuizComplete])
+  React.useEffect(() => {
+    console.log("QuizProvider mounted");
+    return () => console.log("QuizProvider unmounted");
+  }, []);
 
   return (
     <QuizContext.Provider
@@ -239,17 +264,18 @@ export function QuizProvider({ children }: { children: ReactNode }) {
         startQuiz,
         submitQuizResults,
         requestSimilarQuestion,
+        getNextQuestion,
       }}
     >
       {children}
     </QuizContext.Provider>
-  )
+  );
 }
 
 export function useQuiz() {
-  const context = useContext(QuizContext)
+  const context = useContext(QuizContext);
   if (!context) {
-    throw new Error("useQuiz must be used within a QuizProvider")
+    throw new Error("useQuiz must be used within a QuizProvider");
   }
-  return context
+  return context;
 }

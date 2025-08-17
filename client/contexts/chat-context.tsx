@@ -1,14 +1,8 @@
 "use client"
 
 import { createContext, useContext, useState, type ReactNode } from "react"
-import { chatApi, analyticsApi } from "@/lib/mock-api"
-
-interface ChatMessage {
-  id: string
-  content: string
-  sender: "user" | "ai"
-  timestamp: Date
-}
+import { Api } from "@/lib/api"
+import {ChatMessage} from "@/@types"
 
 interface ChatState {
   messages: ChatMessage[]
@@ -16,7 +10,6 @@ interface ChatState {
   isTyping: boolean
   isLoading: boolean
   error: string | null
-  sessionId: string | null
 }
 
 interface ChatContextType {
@@ -32,26 +25,23 @@ export function ChatProvider({ children }: { children: ReactNode }) {
   const [state, setState] = useState<ChatState>({
     messages: [
       {
-        id: "1",
-        content:
+        data: {
+          content:
           "Hi! I'm your CFA study assistant. I can help you with:\n\n• Explaining complex financial concepts\n• Clarifying quiz questions\n• Providing study tips\n• Discussing CFA topics like CAPM, duration, ethics, etc.\n\nWhat would you like to know?",
-        sender: "ai",
-        timestamp: new Date(),
+        },
+        type: "ai",
       },
     ],
     isOpen: false,
     isTyping: false,
     isLoading: false,
     error: null,
-    sessionId: null,
   })
 
   const sendMessage = async (content: string) => {
     const userMessage: ChatMessage = {
-      id: Date.now().toString(),
-      content,
-      sender: "user",
-      timestamp: new Date(),
+      type: "human",
+      data: { content },
     }
 
     setState((prev) => ({
@@ -63,19 +53,14 @@ export function ChatProvider({ children }: { children: ReactNode }) {
     }))
 
     try {
-      await analyticsApi.trackInteraction("chat_message_sent", {
-        messageLength: content.length,
-        timestamp: new Date(),
-      })
+      const chatApi = Api.getInstance();
 
-      const response = await chatApi.sendMessage(content, state.sessionId || undefined)
+      const response = await chatApi.postChat(content)
 
-      if (response.success) {
+      if (response != null && response.response) {
         const aiResponse: ChatMessage = {
-          id: (Date.now() + 1).toString(),
-          content: response.data.response,
-          sender: "ai",
-          timestamp: new Date(),
+          type: "ai",
+          data: { content: response.response },
         }
 
         setState((prev) => ({
@@ -83,22 +68,16 @@ export function ChatProvider({ children }: { children: ReactNode }) {
           messages: [...prev.messages, aiResponse],
           isTyping: false,
           isLoading: false,
-          sessionId: response.data.sessionId,
         }))
-
-        await analyticsApi.trackInteraction("chat_response_received", {
-          responseLength: response.data.response.length,
-          sessionId: response.data.sessionId,
-        })
       } else {
-        throw new Error(response.message || "Failed to send message")
+        throw new Error("Failed to send message")
       }
     } catch (error) {
       const errorMessage: ChatMessage = {
-        id: (Date.now() + 2).toString(),
-        content: "I apologize, but I'm having trouble processing your request right now. Please try again.",
-        sender: "ai",
-        timestamp: new Date(),
+        data: {
+          content: "I apologize, but I'm having trouble processing your request right now. Please try again.",
+        },
+        type: "ai",
       }
 
       setState((prev) => ({
@@ -113,11 +92,6 @@ export function ChatProvider({ children }: { children: ReactNode }) {
 
   const toggleChat = () => {
     setState((prev) => ({ ...prev, isOpen: !prev.isOpen }))
-
-    analyticsApi.trackInteraction("chat_toggled", {
-      isOpen: !state.isOpen,
-      timestamp: new Date(),
-    })
   }
 
   const closeChat = () => {

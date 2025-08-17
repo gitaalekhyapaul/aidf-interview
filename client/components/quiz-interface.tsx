@@ -1,53 +1,58 @@
-"use client"
+"use client";
 
-import { useQuiz } from "@/contexts/quiz-context"
-import { useChat } from "@/contexts/chat-context"
-import { Button } from "@/components/ui/button"
-import { HelpCircle, Home } from "lucide-react"
-import Link from "next/link"
-import { useState } from "react"
-import { QuestionCard } from "./quiz/question-card"
-import { AnswerChoices } from "./quiz/answer-choices"
-import { FeedbackSection } from "./quiz/feedback-section"
-import { QuizProgress } from "./quiz/quiz-progress"
-import { ActionButtons } from "./quiz/action-buttons"
+import { useQuiz } from "@/contexts/quiz-context";
+import { useChat } from "@/contexts/chat-context";
+import { Button } from "@/components/ui/button";
+import { HelpCircle, Home } from "lucide-react";
+import Link from "next/link";
+import { useState } from "react";
+import { QuestionCard } from "./quiz/question-card";
+import { AnswerChoices } from "./quiz/answer-choices";
+import { FeedbackSection } from "./quiz/feedback-section";
+import { QuizProgress } from "./quiz/quiz-progress";
+import { ActionButtons } from "./quiz/action-buttons";
 
 export function QuizInterface() {
-  const { state, dispatch } = useQuiz()
-  const { toggleChat } = useChat()
-  const [showExplanationRequest, setShowExplanationRequest] = useState(false)
+  const { state, dispatch, requestSimilarQuestion, getNextQuestion } =
+    useQuiz();
+  const { toggleChat } = useChat();
+  const [, setShowExplanationRequest] = useState(false);
 
-  const currentQuestion = state.questions[state.currentQuestionIndex]
-  const isCorrect = state.selectedAnswer === currentQuestion.correct_answer
-
+  const currentQuestion = state.questions[state.currentQuestionIndex];
+  console.log("QuizInterface currentQuestion:", currentQuestion);
+  console.log("QuizInterface state:", JSON.stringify(state, null, 2));
+  const isCorrect = state.selectedAnswer === currentQuestion.correct_answer;
   const handleAnswerSelect = (answer: string) => {
-    if (state.showFeedback) return
-    dispatch({ type: "SELECT_ANSWER", answer })
-  }
+    if (state.showFeedback) return;
+    dispatch({ type: "SELECT_ANSWER", answer });
+  };
 
   const handleSubmitAnswer = () => {
-    if (!state.selectedAnswer) return
-    dispatch({ type: "SHOW_FEEDBACK" })
-  }
+    if (!state.selectedAnswer) return;
+    dispatch({ type: "SHOW_FEEDBACK" });
+  };
 
-  const handleNextQuestion = () => {
-    dispatch({ type: "NEXT_QUESTION" })
-    setShowExplanationRequest(false)
-  }
+  const handleNextQuestion = async () => {
+    dispatch({ type: "NEXT_QUESTION" });
+    await getNextQuestion();
+    setShowExplanationRequest(false);
+  };
 
-  const handleRequestExplanation = () => {
-    dispatch({ type: "SHOW_EXPLANATION" })
-    setShowExplanationRequest(true)
-  }
+  // const _handleRequestExplanation = () => {
+  //   dispatch({ type: "SHOW_EXPLANATION" })
+  //   setShowExplanationRequest(true)
+  // }
 
-  const handleRequestSimilarQuestion = () => {
-    dispatch({ type: "REQUEST_SIMILAR_QUESTION" })
-    handleNextQuestion()
-  }
+  const handleRequestSimilarQuestion = async () => {
+    dispatch({ type: "REQUEST_SIMILAR_QUESTION" });
+    await requestSimilarQuestion(currentQuestion.id, state.selectedAnswer!);
+    dispatch({ type: "NEXT_QUESTION" });
+    setShowExplanationRequest(false);
+  };
 
   const handleFinishQuiz = () => {
-    dispatch({ type: "FINISH_QUIZ" })
-  }
+    dispatch({ type: "FINISH_QUIZ" });
+  };
 
   return (
     <div className="min-h-screen bg-background">
@@ -57,13 +62,18 @@ export function QuizInterface() {
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div className="flex items-center gap-4">
               <Link href="/">
-                <Button variant="ghost" size="sm" className="text-muted-foreground hover:text-foreground">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="text-muted-foreground hover:text-foreground"
+                >
                   <Home className="h-4 w-4 mr-2" />
                   Home
                 </Button>
               </Link>
               <div className="text-sm text-muted-foreground">
-                Question {state.currentQuestionIndex + 1} of {state.questions.length}
+                Question {state.currentQuestionIndex + 1} of{" "}
+                {state.questions.length}
               </div>
             </div>
 
@@ -101,7 +111,10 @@ export function QuizInterface() {
               id: currentQuestion.id,
               question: currentQuestion.question,
               topic: currentQuestion.topic,
-              difficulty: currentQuestion.difficulty as "Easy" | "Medium" | "Hard",
+              difficulty: currentQuestion.difficulty as
+                | "Easy"
+                | "Medium"
+                | "Hard",
               timeEstimate: "2-3 min",
             }}
             currentQuestion={state.currentQuestionIndex + 1}
@@ -130,7 +143,7 @@ export function QuizInterface() {
               selectedAnswer={state.selectedAnswer}
               showFeedback={state.showFeedback}
               isCorrect={isCorrect}
-              isLastQuestion={state.currentQuestionIndex === state.questions.length - 1}
+              isLastQuestion={state.currentQuestionIndex === 9}
               onSubmit={handleSubmitAnswer}
               onNext={handleNextQuestion}
               onSimilarQuestion={handleRequestSimilarQuestion}
@@ -151,5 +164,5 @@ export function QuizInterface() {
         </div>
       </main>
     </div>
-  )
+  );
 }
