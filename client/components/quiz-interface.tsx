@@ -38,11 +38,6 @@ export function QuizInterface() {
     setShowExplanationRequest(false);
   };
 
-  // const _handleRequestExplanation = () => {
-  //   dispatch({ type: "SHOW_EXPLANATION" })
-  //   setShowExplanationRequest(true)
-  // }
-
   const handleRequestSimilarQuestion = async () => {
     dispatch({ type: "REQUEST_SIMILAR_QUESTION" });
     await requestSimilarQuestion(currentQuestion.id, state.selectedAnswer!);
@@ -116,6 +111,7 @@ export function QuizInterface() {
                 | "Medium"
                 | "Hard",
               timeEstimate: "2-3 min",
+              subtopic: currentQuestion.subtopic || "",
             }}
             currentQuestion={state.currentQuestionIndex + 1}
             totalQuestions={state.questions.length}
@@ -135,6 +131,7 @@ export function QuizInterface() {
             isCorrect={isCorrect}
             explanation={currentQuestion.explanation}
             showFeedback={state.showFeedback}
+            formulaUsed={currentQuestion.formula_used || ""}
           />
 
           {/* Action Buttons */}
