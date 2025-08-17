@@ -18,6 +18,7 @@ export default function QuizPage() {
     } else {
       console.log("Questions already loaded:", state.questions.length);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   if (state.isLoading || state.questions.length === 0) {
     return (

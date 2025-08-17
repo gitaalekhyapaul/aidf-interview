@@ -20,11 +20,9 @@ import {
   Target,
 } from "lucide-react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 
 export function QuizResults() {
   const { state, dispatch, startQuiz } = useQuiz();
-  const router = useRouter();
 
   const scorePercentage = Math.round(
     (state.score / state.questions.length) * 100
