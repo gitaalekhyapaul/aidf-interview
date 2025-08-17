@@ -18,7 +18,7 @@ export function ChatToggleButton({ isOpen, onClick, hasUnreadMessages }: ChatTog
         ${
           isOpen
             ? "bg-slate-700 hover:bg-slate-600 border border-slate-600"
-            : "bg-cyan-600 hover:bg-cyan-700 shadow-cyan-500/25"
+            : "bg-teal-800 hover:bg-teal-700 shadow-teal-500/25"
         }
         ${hasUnreadMessages && !isOpen ? "animate-pulse" : ""}
       `}

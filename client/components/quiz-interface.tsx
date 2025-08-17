@@ -80,7 +80,7 @@ export function QuizInterface() {
                 variant="outline"
                 size="sm"
                 onClick={toggleChat}
-                className="hidden md:flex bg-transparent border-border text-muted-foreground hover:bg-muted"
+                className="hidden md:flex bg-transparent border-border text-muted-foreground hover:bg-muted hover:text-teal-200"
               >
                 <HelpCircle className="h-4 w-4 mr-2" />
                 Ask AI

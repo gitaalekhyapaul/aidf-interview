@@ -3,6 +3,7 @@ import { v4 } from "uuid";
 export const router = Express.Router();
 import { LanggraphService } from "../services/langgraph.service";
 import { RedisService } from "../services/redis.service";
+import { StoredMessage } from "@langchain/core/messages";
 const handlePostChat = async (
   req: Request,
   res: Response,
@@ -45,7 +46,16 @@ export const handleGetChat = async (
     if (!chatData) {
       return res.status(404).json({ error: "Chat not found" });
     }
-    return res.json(JSON.parse(chatData));
+    const parsedData = JSON.parse(chatData);
+    const sanitizedData = parsedData.map((msg: StoredMessage) => ({
+      type: msg.type,
+      data: {
+        content: Array.isArray(msg.data.content)
+          ? msg.data.content.find((c) => c.type === "text")?.text
+          : msg.data.content,
+      },
+    }));
+    return res.json(sanitizedData);
   } catch (error) {
     console.error("Error in handleGetChat:", error);
     return res.status(500).json({ error: "Internal server error" });
